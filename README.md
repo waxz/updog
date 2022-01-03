@@ -21,6 +21,12 @@ Install using pip:
 
 `pip3 install updog`
 
+## Build and Install
+`python setup.py install` don't install addition file, use `pip install .`
+[pip adding file to bin](https://stackoverflow.com/questions/4840182/setup-py-and-adding-file-to-bin)
+
+`pip install .`
+
 ## Usage
 
 `updog [-d DIRECTORY] [-p PORT] [--password PASSWORD] [--ssl]`
