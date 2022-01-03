@@ -28,13 +28,18 @@ def human_readable_file_size(size):
     return '{:.4g} {}'.format(size / (1 << (order * 10)), _suffixes[order])
 
 
-def process_files(directory_files, base_directory):
+def process_files(directory_files, base_directory,filter_exts):
     files = []
     for file in directory_files:
         if file.is_dir():
             size = '--'
             size_sort = -1
         else:
+            (filename, extension) = os.path.splitext(file)
+
+            if extension not in filter_exts:
+                continue
+
             size = human_readable_file_size(file.stat().st_size)
             size_sort = file.stat().st_size
         files.append({

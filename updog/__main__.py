@@ -34,12 +34,13 @@ def parse_arguments():
     parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
     parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
     parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
+    parser.add_argument('-e', '--exts', nargs='+', default=['.pdf','.mobi','.epub','.azw3'])
 
     args = parser.parse_args()
 
     # Normalize the path
     args.directory = os.path.abspath(args.directory)
-
+    
     return args
 
 
@@ -61,10 +62,15 @@ def main():
     ############################################
     # File Browsing and Download Functionality #
     ############################################
-    @app.route('/', defaults={'path': None})
+    @app.route('/', defaults={'path': None}, methods=['GET', 'POST'])
     @app.route('/<path:path>')
     @auth.login_required
     def home(path):
+        if request.method == 'POST':
+            print("file_filter check box",request.form.getlist('file_filter'))
+            args.exts = request.form.getlist('file_filter')
+
+        print("args.exts: ",args.exts)
         # If there is a path parameter and it is valid
         if path and is_valid_subpath(path, base_directory):
             # Take off the trailing '/'
@@ -106,11 +112,11 @@ def main():
         if os.path.exists(requested_path):
             # Read the files
             try:
-                directory_files = process_files(os.scandir(requested_path), base_directory)
+                directory_files = process_files(os.scandir(requested_path), base_directory,args.exts)
             except PermissionError:
                 abort(403, 'Read Permission Denied: ' + requested_path)
 
-            return render_template('home.html', files=directory_files, back=back,
+            return render_template('home.html', files=directory_files, back=back,exts=args.exts,
                                    directory=requested_path, is_subdirectory=is_subdirectory, version=VERSION)
         else:
             return redirect('/')

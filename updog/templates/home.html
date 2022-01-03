@@ -48,6 +48,34 @@
                 </button>
             </p>
         </form>
+        
+
+        <!-- --File Filter -- -->
+        <form method="post">
+            {% if ".pdf" in exts %} 
+            <input type="checkbox" name="file_filter" value=".pdf" checked>.pdf</input>
+            {% else %}
+            <input type="checkbox" name="file_filter" value=".pdf">.pdf</input>
+            {% endif %} 
+
+            {% if ".epub" in exts %} 
+            <input type="checkbox" name="file_filter" value=".epub" checked>.epub</input>
+            {% else %}
+            <input type="checkbox" name="file_filter" value=".epub">.epub</input>
+            {% endif %} 
+            {% if ".mobi" in exts %} 
+            <input type="checkbox" name="file_filter" value=".mobi" checked>.mobi</input>
+            {% else %}
+            <input type="checkbox" name="file_filter" value=".mobi">.mobi</input>
+            {% endif %}  
+            {% if ".azw3" in exts %} 
+            <input type="checkbox" name="file_filter" value=".azw3" checked>.azw3</input>
+            {% else %}
+            <input type="checkbox" name="file_filter" value=".azw3">.azw3</input>
+            {% endif %}  
+
+            <input type="submit">
+        </form>
     </div>
 
     {% if is_subdirectory %}
